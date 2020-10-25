@@ -1,0 +1,8 @@
+package rules;
+
+rule "rule1"
+    when
+        eval(true)
+    then
+        System.out.println("Say Hello By Conf");
+end

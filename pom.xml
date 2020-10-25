@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>fuyiqi.drools</groupId>
+    <artifactId>droolsStudy</artifactId>
+    <version>1.0</version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <drools.version>7.6.0.Final</drools.version>
+        <testng.version>6.8.7</testng.version>
+        <slf4j.version>1.7.7</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+        <fastjson.version>1.2.53</fastjson.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <spring-tx.version>3.1.0.RELEASE</spring-tx.version>
+        <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+        <maven-source-plugin.version>3.0.0</maven-source-plugin.version>
+        <maven-surefire-plugin.version>2.16</maven-surefire-plugin.version>
+        <maven-resources-plugin.version>2.6</maven-resources-plugin.version>
+    </properties>
+
+
+    <dependencies>
+
+        <!--		<dependency>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                    <version>1.2.17</version>
+                    <scope>compile</scope>
+                </dependency>-->
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <!--drools[start]-->
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-core</artifactId>
+            <version>${drools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-compiler</artifactId>
+            <version>${drools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-templates</artifactId>
+            <version>${drools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kie</groupId>
+            <artifactId>kie-ci</artifactId>
+            <version>${drools.version}</version>
+        </dependency>
+        <!--drools[end]-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <!--去掉多余的依赖 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
+
+        </dependency>
+
+
+
+
+
+
+
+
+
+
+
+
+    </dependencies>
+
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                    <encoding>utf-8</encoding>
+                </configuration>
+            </plugin>
+            <!-- 生成源码包 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- resource配置 -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-xmls</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <encoding>UTF-8</encoding>
+                            <outputDirectory>${basedir}/target/classes</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/java</directory>
+                                    <includes>
+                                        <include>**/*.xml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.kie</groupId>
+                <artifactId>kie-maven-plugin</artifactId>
+                <version>${drools.version}</version>
+                <extensions>true</extensions>
+            </plugin>
+
+            <!-- 所有依赖包全部打包加入 -->
+            <!-- <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    这部分可有可无,加上的话则直接生成可运行jar包
+                    <archive>
+                    <manifest>
+                    <mainClass>${exec.mainClass}</mainClass>
+                    </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    配置执行器
+                    <execution>
+                        <id>make-assembly</id>
+                        绑定到package命令的生命周期上
+                        <phase>package</phase>
+                        <goals>
+                            只运行一次
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>-->
+
+        </plugins>
+    </build>
+
+
+</project>
