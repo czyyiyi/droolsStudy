@@ -13,18 +13,13 @@ import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.conf.ClockTypeOption;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * drools引擎类，最重要的是向外输出kieSession
  */
-public class DroolsEngine {
+public class DroolsEngine extends CommonBase {
     /**============variable============**/
-    private static final String kieBaseMap_key = "kieBaseK";
-    private final ConcurrentHashMap<String, KieBase> kieBaseMap = new ConcurrentHashMap<>();
+
 //kie配置层变量
-    private static final String kbaseName = "FileSystemKBase";
-    private static final String ksessionName = "FileSystemKSession";
     /**drools官方api**/
     private KieServices kieServices;
     /**drools工作内存文件系统**/
@@ -38,6 +33,7 @@ public class DroolsEngine {
     /**drools发行版本号**/
     private ReleaseId releaseId;
 //kie运行层变量
+    KieBuilder kieBuilder;
     /**kieSession的会话容器***/
     private KieContainer kieContainer;
     /**包含规则的drools知识系统***/
@@ -47,7 +43,6 @@ public class DroolsEngine {
     /**============funtion============**/
 
     private static class  DroolsEngineHolder{
-
         private static final DroolsEngine droolsEngine = new DroolsEngine();
     }
 
@@ -61,7 +56,7 @@ public class DroolsEngine {
         kieServices = KieServices.Factory.get();
         releaseId = getReleaseId();
         add_kmodule2KieFileSystem(kbaseName,ksessionName);
-        System.out.println("初始化dools引擎配置层耗时(毫秒)="+ (System.currentTimeMillis()-start));
+        System.out.println("初始化drools引擎配置层耗时(毫秒)="+ (System.currentTimeMillis()-start));
     }
 
     /**
@@ -74,12 +69,12 @@ public class DroolsEngine {
     /**
      * 代码实现kmodule.xml配置文件功能
      */
-    public DroolsEngine add_kmodule2KieFileSystem(String kbaseName,String KsessionName){
+    private DroolsEngine add_kmodule2KieFileSystem(String kbaseName,String KsessionName){
         kieFileSystem = kieServices.newKieFileSystem();
         // 构建 kmodule.xml配置文件
         kieModuleModel = kieServices.newKieModuleModel(); //1为kmodule.xml创建KieModuleModel类
         kieBaseModel = kieModuleModel.newKieBaseModel(kbaseName)//"FileSystemKBase"
-                .addPackage("rules")//2给kmodule.xml中kbase属性（name和packages）赋值
+                .addPackage(packagesName)//2给kmodule.xml中kbase属性（name和packages）赋值
                 .setDefault(true)
                 .setEqualsBehavior(EqualityBehaviorOption.EQUALITY)
                 .setEventProcessingMode(EventProcessingOption.STREAM);
@@ -100,13 +95,13 @@ public class DroolsEngine {
     public void loadRules(){
         // 将drl规则文件加载到kieFileSystem
         String rule1 = getDrlContent1();
-        String rule2 = getDrlContent1();
+        String rule2 = getDrlContent2();
         //path路径：src/main/resources/rules/ +drl文件名
         kieFileSystem.write("src/main/resources/rules/rule1.drl",rule1);
         kieFileSystem.write("src/main/resources/rules/rule2.drl",rule2);
         // 根据 kmodule.xml配置文件 和 .drl规则文件 加载KieContainer模型
         //7通过KieBuilder进行构建就将该kmodule加入到KieRepository中了。这样就将自定义的kmodule加入到引擎中
-        KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem).buildAll();
+        kieBuilder = kieServices.newKieBuilder(kieFileSystem).buildAll();
         // 获取构建的结果 如果存在异常的情况 作相应的处理
         Results results = kieBuilder.getResults();
         if(results.hasMessages(Message.Level.ERROR)){
@@ -115,8 +110,17 @@ public class DroolsEngine {
         }
         kieContainer = kieServices.newKieContainer(releaseId);
         kieBase = kieContainer.getKieBase(kbaseName);//使用kiemodule.xml中kbase属性的值
-        //移除一个规则
+        /********移除一个规则[start]********/ //System.out.println(kieBase.getKiePackages());//拿的是drl文件中package
         //kieBase.removeRule("rules","rule-21");
+        /********移除一个规则[end]********/
+
+        /********删除一个drl文件[start]********/
+/*      kieFileSystem.delete("src/main/resources/rules/rule2.drl");
+        kieBuilder = kieServices.newKieBuilder(kieFileSystem).buildAll();
+        kieContainer = kieServices.newKieContainer(releaseId);*/
+        /********删除一个drl文件[end]********/
+
+        kieBase = kieContainer.getKieBase(kbaseName);//使用kiemodule.xml中kbase属性的值
         kieBaseMap.put(kieBaseMap_key,kieBase);
     }
 
@@ -132,35 +136,7 @@ public class DroolsEngine {
 
 
 
-    /******生成drl文件的内容******/
-    public String getDrlContent1(){
-        String drl_str= "package rulesP\r\n"
-                + "rule \"rule-11\"\r\n"
-                + "\twhen\r\n"
-                + "\t\teval(true)\n"
-                + "\tthen\r\n"
-                + "\t\tSystem.out.println(\"Say Hello-11 By Code\");\n"
-                + "end\r\n"
-                ;
-        return drl_str;
-    }
-    /******生成drl文件的内容******/
-    public String getDrlContent2(){
-        String drl_str= "package rulesP\r\n"
-                + "rule \"rule-21\"\r\n"
-                + "\twhen\r\n"
-                + "\t\teval(true)\n"
-                + "\tthen\r\n"
-                + "\t\tSystem.out.println(\"Say Hello-21 By Code\");\n"
-                + "end\r\n"
-                + "rule \"rule-22\"\r\n"
-                + "\twhen\r\n"
-                + "\t\teval(true)\n"
-                + "\tthen\r\n"
-                + "\t\tSystem.out.println(\"Say Hello-22 By Code\");\n"
-                + "end\r\n";
-        return drl_str;
-    }
+
 
 
 
