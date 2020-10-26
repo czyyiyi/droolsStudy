@@ -1,6 +1,5 @@
-<kmodule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://www.drools.org/xsd/kmodule">
-    <kbase name="FileSystemKBase1" default="false" eventProcessingMode="cloud" equalsBehavior="identity" declarativeAgenda="disabled" scope="javax.enterprise.context.ApplicationScoped" packages="rules">
+<kmodule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.drools.org/xsd/kmodule">
+    <kbase name="FileSystemKBase1" default="true" eventProcessingMode="stream" equalsBehavior="identity" declarativeAgenda="disabled" scope="javax.enterprise.context.ApplicationScoped" packages="rules">
         <ksession name="FileSystemKSession1" type="stateful" default="false" clockType="realtime" beliefSystem="simple"/>
     </kbase>
 </kmodule>

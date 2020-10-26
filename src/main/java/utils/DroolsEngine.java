@@ -36,7 +36,7 @@ public class DroolsEngine extends CommonBase {
     KieBuilder kieBuilder;
     /**kieSession的会话容器***/
     private KieContainer kieContainer;
-    /**包含规则的drools知识系统***/
+    /**包含规则的drools知识仓库***/
     private KieBase kieBase;
 
 

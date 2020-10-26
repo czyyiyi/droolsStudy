@@ -2,6 +2,7 @@ package utils;
 
 import org.drools.core.impl.KnowledgeBaseImpl;
 import org.kie.api.KieBase;
+import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.AgendaFilter;
 import org.kie.api.runtime.rule.Match;
@@ -9,6 +10,9 @@ import org.kie.api.runtime.rule.Match;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CommonBase {
+
+    protected static final String kieContainerMap_key = "kieContainer_key";
+    protected final ConcurrentHashMap<String, KieContainer> kieContainerMap = new ConcurrentHashMap<>();
 
     protected static final String kieBaseMap_key = "kieBase_key";
     protected final ConcurrentHashMap<String, KieBase> kieBaseMap = new ConcurrentHashMap<>();
