@@ -56,7 +56,7 @@ public class DroolsEngine extends CommonBase {
         kieServices = KieServices.Factory.get();
         releaseId = getReleaseId();
         add_kmodule2KieFileSystem(kbaseName,ksessionName);
-        System.out.println("初始化drools引擎配置层耗时(毫秒)="+ (System.currentTimeMillis()-start));
+        //System.out.println("初始化drools引擎配置层耗时(毫秒)="+ (System.currentTimeMillis()-start));
     }
 
     /**
@@ -94,11 +94,11 @@ public class DroolsEngine extends CommonBase {
      */
     public void loadRules(){
         // 将drl规则文件加载到kieFileSystem
-        String rule1 = getDrlContent1();
-        String rule2 = getDrlContent2();
+        String rule1 = getDrlContent3();
+        //String rule2 = getDrlContent2();
         //path路径：src/main/resources/rules/ +drl文件名
         kieFileSystem.write("src/main/resources/rules/rule1.drl",rule1);
-        kieFileSystem.write("src/main/resources/rules/rule2.drl",rule2);
+        //kieFileSystem.write("src/main/resources/rules/rule2.drl",rule2);
         // 根据 kmodule.xml配置文件 和 .drl规则文件 加载KieContainer模型
         //7通过KieBuilder进行构建就将该kmodule加入到KieRepository中了。这样就将自定义的kmodule加入到引擎中
         kieBuilder = kieServices.newKieBuilder(kieFileSystem).buildAll();

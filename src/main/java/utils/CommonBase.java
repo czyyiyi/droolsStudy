@@ -23,7 +23,7 @@ public class CommonBase {
     protected static final String kbaseName = "FileSystemKBase";
     protected static final String ksessionName = "FileSystemKSession";
     protected static final String packagesName = "rules";
-    /******生成drl文件的内容******/
+    /******生成drl1文件的内容******/
     public String getDrlContent1(){
         String drl_str= "package rules\r\n"
                 + "rule \"rule-11\"\r\n"
@@ -35,7 +35,7 @@ public class CommonBase {
                 ;
         return drl_str;
     }
-    /******生成drl文件的内容******/
+    /******生成drl2文件的内容******/
     public String getDrlContent2(){
         String drl_str= "package rules\r\n"
                 + "rule \"rule-21\"\r\n"
@@ -52,7 +52,19 @@ public class CommonBase {
                 + "end\r\n";
         return drl_str;
     }
+    /******生成drl3文件的内容******/
+    public static String getDrlContent3(){
+        String res = "package rules \r\n"
+                + "import details.AlertDetail; \r\n"
+                + "rule \"alertGroup\"\r\n"
+                + "\t when \r\n"
+                + "\t\t $alertDetail : AlertDetail(title contains \"Pi\" && text contains \"数据\"); \r\n"
+                + "\t then \r\n"
+                + "\t\t System.out.println(\"gdyh\");\r\n"
+                + "end\r\n";
 
+        return res;
+    }
     /******通过kiesession执行规则匹配******/
     public void runKieSession(KieSession kieSession){
         try {
