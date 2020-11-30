@@ -1,0 +1,11 @@
+package org.ks.drools.test.recovery;
+import details.AlertDetail;
+rule "recovery${(ruleName)!}"
+agenda-group "${(agendaGroup)!}"
+lock-on-active true
+//no-loop true
+    when
+        $alertDetail : AlertDetail(${(patternExpression)!})
+    then
+        System.out.println("命中的分组是${(agendaGroup)!}");
+end

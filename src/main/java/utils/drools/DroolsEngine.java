@@ -1,4 +1,4 @@
-package utils;
+package utils.drools;
 
 import org.drools.compiler.kproject.ReleaseIdImpl;
 import org.kie.api.KieBase;
@@ -12,6 +12,9 @@ import org.kie.api.conf.EventProcessingOption;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.conf.ClockTypeOption;
+import utils.CommonBase;
+
+import java.util.List;
 
 /**
  * drools引擎类，最重要的是向外输出kieSession
@@ -123,6 +126,31 @@ public class DroolsEngine extends CommonBase {
         kieBase = kieContainer.getKieBase(kbaseName);//使用kiemodule.xml中kbase属性的值
         kieBaseMap.put(kieBaseMap_key,kieBase);
     }
+
+    public void loadRules(List<String> ruleContentList){
+        String path = "src/main/resources/rules/";
+        //读取rule内容，写入kieFileSystem
+        for(int i = 0; i<ruleContentList.size();i++){
+            kieFileSystem.write(path+String.valueOf(i+1)+".drl",ruleContentList.get(i));
+        }
+        kieFileSystem.write("src/main/resources/rules/rule.drl",getDrlContent3());
+
+        // 根据 kmodule.xml配置文件 和 .drl规则文件 加载KieContainer模型
+        //7通过KieBuilder进行构建就将该kmodule加入到KieRepository中了。这样就将自定义的kmodule加入到引擎中
+        kieBuilder = kieServices.newKieBuilder(kieFileSystem).buildAll();
+        // 获取构建的结果 如果存在异常的情况 作相应的处理
+        Results results = kieBuilder.getResults();
+        if(results.hasMessages(Message.Level.ERROR)){
+            throw new RuntimeException("构建kieBuilder失败:\n"
+                    + results.toString());
+        }
+        kieContainer = kieServices.newKieContainer(releaseId);
+        kieBase = kieContainer.getKieBase(kbaseName);//使用kiemodule.xml中kbase属性的值
+
+        kieBase = kieContainer.getKieBase(kbaseName);//使用kiemodule.xml中kbase属性的值
+        kieBaseMap.put(kieBaseMap_key,kieBase);
+    }
+
 
     public KieSession getkieSession(){
         return kieBaseMap.get(kieBaseMap_key).newKieSession();

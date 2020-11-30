@@ -1,4 +1,4 @@
-package utils;
+package utils.drools;
 
 
 import org.drools.core.impl.KnowledgeBaseFactory;
@@ -11,11 +11,12 @@ import org.kie.internal.builder.KnowledgeBuilderError;
 import org.kie.internal.builder.KnowledgeBuilderErrors;
 import org.kie.internal.builder.KnowledgeBuilderFactory;
 import org.kie.internal.io.ResourceFactory;
+import utils.CommonBase;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
-public class DroolsEngineLight extends CommonBase{
+public class DroolsEngineLight extends CommonBase {
 
     private KnowledgeBuilder knowledgeBuilder;
     private KnowledgeBaseImpl kBase;

@@ -10,6 +10,7 @@ public class AlertDetail implements Serializable {
     private long alertid;
     private String text;
     private String title;
+
     public AlertDetail() {
         super();
     }

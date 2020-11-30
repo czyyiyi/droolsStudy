@@ -1,5 +1,8 @@
+package cmbc;
+
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.text.SimpleDateFormat;
@@ -30,6 +33,25 @@ public class tricks {
         getPattern(MonthTime());
         getPattern(DayTime());
     }
+
+    @Test
+    public void test4(){
+        String s1 = getPattern(YearTime());
+        String s2 = getPattern(MonthTime());
+        String s3 = getPattern(DayTime());
+
+        JSONObject j1 = PatternDecode(s1);
+        JSONObject j2 = PatternDecode(s2);
+        JSONObject j3 = PatternDecode(s3);
+
+        Assert.assertEquals(j1,YearTime());
+        Assert.assertEquals(j2,MonthTime());
+        Assert.assertEquals(j3,DayTime());
+    }
+
+
+
+
 
 
     /**
@@ -134,7 +156,47 @@ public class tricks {
     }
 
 
-
+    public JSONObject PatternDecode(String pattern){
+        JSONObject res = new JSONObject();
+        String year = pattern.substring(0,4);
+        String month = pattern.substring(4,6);
+        String day = pattern.substring(6,8);
+        String hour = pattern.substring(8,10);
+        String minute = pattern.substring(10,12);
+        String second = pattern.substring(12,14);
+        //System.out.println(year+","+month+","+day+","+hour+","+minute+","+second);
+        if(year.contains("*")){
+            res.put("1year","");
+        }else{
+            res.put("1year",year);
+        }
+        if(month.contains("*")){
+            res.put("2month","");
+        }else{
+            res.put("2month",month);
+        }
+        if(day.contains("*")){
+            res.put("3day","");
+        }else{
+            res.put("3day",day);
+        }
+        if(hour.contains("*")){
+            res.put("4hour","");
+        }else{
+            res.put("4hour",hour);
+        }
+        if(minute.contains("*")){
+            res.put("5minute","");
+        }else{
+            res.put("5minute",minute);
+        }
+        if(second.contains("*")){
+            res.put("6second","");
+        }else {
+            res.put("6second", second);
+        }
+        return res;
+    }
 
 
 

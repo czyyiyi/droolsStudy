@@ -1,11 +1,10 @@
+package dools;
 
 import details.AlertDetail;
 import org.kie.api.runtime.KieSession;
-import org.kie.api.runtime.rule.AgendaFilter;
-import org.kie.api.runtime.rule.Match;
 import org.testng.annotations.Test;
-import utils.DroolsEngine;
-import utils.DroolsEngineLight;
+import utils.drools.DroolsEngine;
+import utils.drools.DroolsEngineLight;
 
 
 import java.io.UnsupportedEncodingException;

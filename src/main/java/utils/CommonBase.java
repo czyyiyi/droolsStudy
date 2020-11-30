@@ -23,6 +23,15 @@ public class CommonBase {
     protected static final String kbaseName = "FileSystemKBase";
     protected static final String ksessionName = "FileSystemKSession";
     protected static final String packagesName = "rules";
+
+    protected static final String SCRIPT_TEMPLATE_KEY = "ruleScriptTempalte";
+    protected static final String SCRIPT_RULE_NAME_KEY = "ruleName";
+    protected static final String SCRIPT_RULE_AGENDAGROUP_KEY = "agendaGroup";
+    protected static final String SCRIPT_RULE_PATTERNEXPRESSION_KEY = "patternExpression";
+    protected static final String SCRIPT_RULE_ALERTSTATUS_KEY = "alertStatus";
+
+
+
     /******生成drl1文件的内容******/
     public String getDrlContent1(){
         String drl_str= "package rules\r\n"
@@ -57,10 +66,11 @@ public class CommonBase {
         String res = "package rules \r\n"
                 + "import details.AlertDetail; \r\n"
                 + "rule \"alertGroup\"\r\n"
+                + "agenda-group \"os\"\r\n"
                 + "\t when \r\n"
-                + "\t\t $alertDetail : AlertDetail(title contains \"Pi\" && text contains \"数据\"); \r\n"
+                + "\t\t $alertDetail : AlertDetail(); \r\n"
                 + "\t then \r\n"
-                + "\t\t System.out.println(\"gdyh\");\r\n"
+                + "\t\t System.out.println(\"命中的分组是os(手动)\");\r\n"
                 + "end\r\n";
 
         return res;
